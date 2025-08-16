@@ -1,0 +1,24 @@
+# --- Ghostty config (Catppuccin Mocha - dark & glassy)
+# Use the local Catppuccin Mocha file you placed in ~/.config/ghostty/themes/
+# (We reference it by relative path so it works anywhere your config is symlinked.)
+theme = catppuccin-mocha
+
+# Appearance
+font-size = 15
+cursor-style = bar
+
+# Glass effect (tune to taste)
+background-opacity = 0.88
+background-blur-radius = 20
+
+# Layout / padding
+window-padding-x = 12
+window-padding-y = 10
+
+# NOTE:
+# We intentionally do NOT set "background" here so the theme’s own background
+# (1e1e2e in your file) remains intact and you avoid any pinkish tint from overrides.
+
+
+#MOVE A TABH
+

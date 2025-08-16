@@ -1,0 +1,20 @@
+{
+  "display": { "separator": " " },
+  "modules": [
+    "break",
+    { "type": "os",       "key": "OS",   "keyColor": "blue"    },
+    { "type": "kernel",   "key": "Krn",  "keyColor": "blue"    },
+    { "type": "cpu",      "key": "CPU",  "keyColor": "green"   },
+    { "type": "gpu",      "key": "GPU",  "keyColor": "green"   },
+    { "type": "memory",   "key": "Mem",  "keyColor": "magenta" },
+    { "type": "command",  "key": "↳",    "text": "~/.config/fastfetch/scripts/mem_breakdown.sh", "keyColor": "magenta" },
+    { "type": "command",  "key": "↳",    "text": "~/.config/fastfetch/scripts/swap_usage.sh",    "keyColor": "magenta" },
+    { "type": "disk",     "key": "Disk", "folders": "/", "format": "{size-used} / {size-total} ({size-percentage})", "keyColor": "yellow" },
+    { "type": "terminal", "key": "Term", "keyColor": "cyan"    },
+    { "type": "shell",    "key": "Shell","keyColor": "cyan"    },
+    { "type": "uptime",   "key": "Up",   "keyColor": "red"     },
+    "break",
+    { "type": "custom",   "format": "Top memory processes", "outputColor": "cyan" },
+    { "type": "command",  "text": "~/.config/fastfetch/scripts/top_mem.sh" }
+  ]
+}

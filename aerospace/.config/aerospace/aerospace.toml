@@ -1,0 +1,174 @@
+# ---------------------------
+# AeroSpace Configuration
+# ---------------------------
+# This file lives at ~/.config/aerospace/aerospace.toml
+# We symlinked it with stow from ~/dotfiles/aerospace/.config/aerospace/aerospace.toml
+# To reload config after edits: `aerospace reload-config`
+
+# ===========================
+# Startup Behavior
+# ===========================
+after-startup-command = [
+] # Commands to run after AeroSpace starts (none for now)
+
+# Start AeroSpace when macOS starts up
+start-at-login = true
+
+# ===========================
+# Window Normalization
+# ===========================
+# Flatten nested containers when possible
+enable-normalization-flatten-containers = true
+
+# Automatically flip orientation if nested containers are opposite
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# ===========================
+# Layout Defaults
+# ===========================
+# Accordion padding = space between accordion panels
+accordion-padding = 30
+
+# Default layout for the root container
+# Possible: 'tiles' (grid tiling) or 'accordion' (stacked)
+default-root-container-layout = 'tiles'
+
+# Default orientation for root container
+# 'auto' means horizontal on wide monitors, vertical on tall monitors
+default-root-container-orientation = 'auto'
+
+# ===========================
+# Focus Behavior
+# ===========================
+# Move mouse to the center of the focused monitor
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# Prevent macOS "Hide application" (Cmd-H) from accidentally hiding apps
+automatically-unhide-macos-hidden-apps = false
+
+# ===========================
+# Keyboard Layout Preset
+# ===========================
+[key-mapping]
+preset = 'qwerty' # Change to 'dvorak' or 'colemak' if needed
+
+# ===========================
+# Window Gaps
+# ===========================
+# Inner = space between windows
+# Outer = space between windows and monitor edges
+[gaps]
+inner.horizontal = 4
+inner.vertical = 4
+outer.left = 8
+outer.bottom = 8
+outer.top = 8
+outer.right = 8
+
+# ===========================
+# Main Mode Keybindings
+# ===========================
+# This is the default mode AeroSpace starts in
+[mode.main.binding]
+
+# ------------------------------------------------
+# CUSTOM VIM-LIKE MOTIONS FOR MOVING WINDOWS
+# ------------------------------------------------
+# cmd-h/j/k/l will MOVE the active window into specific quadrants
+# NOTE: Requires AeroSpace v0.9+ for `move-node-to-position`
+cmd-h = 'move left'
+cmd-l = 'move right'
+cmd-j = 'move down'
+cmd-k = 'move up'
+
+# ------------------------------------------------
+# WINDOW FOCUS CYCLING
+# ------------------------------------------------
+# cmd-quote (cmd + ') jumps to the next window
+# Wrap to the next/prev NON-EMPTY workspace when you hit the end/beginning
+# of windows in the current workspace
+cmd-quote = """exec-and-forget aerospace focus dfs-next --boundaries-action fail || (aerospace list-workspaces --monitor focused --empty no | aerospace workspace --wrap-around next)"""
+cmd-shift-quote = """exec-and-forget aerospace focus dfs-prev --boundaries-action fail || (aerospace list-workspaces --monitor focused --empty no | aerospace workspace --wrap-around prev)"""
+# ─────────────────────────────────────────────
+# Cycle BETWEEN APPS on the current workspace
+# Cmd+Right → next app ; Cmd+Left → previous app
+# Works by stepping DFS until the app changes, staying in this workspace.
+# ─────────────────────────────────────────────
+cmd-right = """exec-and-forget bash -lc '
+cur=$(aerospace list-windows --focused --format "%{app-bundle-id}" 2>/dev/null || true)
+# step through windows until the app changes (wrap inside the workspace)
+for i in {1..20}; do
+  aerospace focus dfs-next --boundaries-action wrap-around-the-workspace
+  now=$(aerospace list-windows --focused --format "%{app-bundle-id}" 2>/dev/null || true)
+  [ -n "$cur" ] && [ "$now" != "$cur" ] && exit 0
+done
+'"""
+
+cmd-left = """exec-and-forget bash -lc '
+cur=$(aerospace list-windows --focused --format "%{app-bundle-id}" 2>/dev/null || true)
+for i in {1..20}; do
+  aerospace focus dfs-prev --boundaries-action wrap-around-the-workspace
+  now=$(aerospace list-windows --focused --format "%{app-bundle-id}" 2>/dev/null || true)
+  [ -n "$cur" ] && [ "$now" != "$cur" ] && exit 0
+done
+'"""
+
+# ------------------------------------------------
+# WORKSPACE SWITCHING
+# ------------------------------------------------
+# cmd + number = jump to workspace
+cmd-1 = 'workspace 1'
+cmd-2 = 'workspace 2'
+cmd-3 = 'workspace 3'
+cmd-4 = 'workspace 4'
+cmd-5 = 'workspace 5'
+cmd-6 = 'workspace 6'
+cmd-7 = 'workspace 7'
+cmd-8 = 'workspace 8'
+cmd-9 = 'workspace 9'
+
+# cmd + alt + number = move active window to that workspace
+cmd-alt-1 = 'move-node-to-workspace 1'
+cmd-alt-2 = 'move-node-to-workspace 2'
+cmd-alt-3 = 'move-node-to-workspace 3'
+cmd-alt-4 = 'move-node-to-workspace 4'
+cmd-alt-5 = 'move-node-to-workspace 5'
+cmd-alt-6 = 'move-node-to-workspace 6'
+cmd-alt-7 = 'move-node-to-workspace 7'
+cmd-alt-8 = 'move-node-to-workspace 8'
+cmd-alt-9 = 'move-node-to-workspace 9'
+#------------------------------------------------
+# WINDOW RESIZING
+# ------------------------------------------------
+alt-minus = 'resize smart -50' # shrink window
+alt-equal = 'resize smart +50' # grow window
+
+# ------------------------------------------------
+# WORKSPACE NAVIGATION
+# ------------------------------------------------
+alt-tab = 'workspace-back-and-forth'                           # toggle between last two workspaces
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next' # move workspace to next monitor
+
+# ------------------------------------------------
+# MODE SWITCHING
+# ------------------------------------------------
+alt-shift-semicolon = 'mode service' # enter service mode
+
+# ===========================
+# Service Mode Keybindings
+# ===========================
+# Used for less common commands
+[mode.service.binding]
+esc = ['reload-config', 'mode main']                       # reload config & return to main mode
+r = ['flatten-workspace-tree', 'mode main']                # reset layout
+f = ['layout floating tiling', 'mode main']                # toggle floating/tiling
+backspace = ['close-all-windows-but-current', 'mode main'] # close others
+
+alt-shift-h = ['join-with left', 'mode main']
+alt-shift-j = ['join-with down', 'mode main']
+alt-shift-k = ['join-with up', 'mode main']
+alt-shift-l = ['join-with right', 'mode main']
+
+down = 'volume down'
+up = 'volume up'
+shift-down = ['volume set 0', 'mode main']
