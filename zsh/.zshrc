@@ -41,3 +41,5 @@ if command -v eza >/dev/null 2>&1; then
 fi
 # To bypass the alias in a pinch: use \ls or command ls
 # --------------------------------
+
+export DYLD_FALLBACK_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_FALLBACK_LIBRARY_PATH"

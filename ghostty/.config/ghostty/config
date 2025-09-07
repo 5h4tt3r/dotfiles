@@ -20,5 +20,4 @@ window-padding-y = 10
 # (1e1e2e in your file) remains intact and you avoid any pinkish tint from overrides.
 
 
-#MOVE A TABH
-
+term = ghostty
