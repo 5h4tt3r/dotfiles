@@ -14,7 +14,7 @@ return {
       backend = "kitty",
       processor = "magick_cli",
       integrations = {
-        markdown = { enabled = false },
+        markdown = { enabled = true, floating_windows=true,},
         neorg = { enabled = false },
       },
       max_width = 0,
